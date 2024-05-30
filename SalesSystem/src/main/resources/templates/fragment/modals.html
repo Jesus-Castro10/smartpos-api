@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="modal-sale" th:remove="tag">
+    <div class="modal fade" id="saleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Sale</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" th:with="sale = ${session.get('saleForm')}">
+                    <input class="form-control" type="text" th:value="${sale.idSale}" aria-label="readonly input example" readonly>
+                    <input class="form-control" type="text" th:value="${sale.total}" aria-label="readonly input example" readonly>
+                    <input class="form-control" type="text" th:value="${sale.date}" aria-label="readonly input example" readonly>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-info">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
