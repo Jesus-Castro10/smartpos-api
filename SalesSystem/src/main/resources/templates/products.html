@@ -4,73 +4,40 @@
 <head th:replace="~{fragment/header::header-section}">
 </head>
 <body>
-<!--Navbar General-->
 <div th:replace="~{fragment/navbar::navbar-section}">Navbar</div>
-<!--Navbar General-->
 <div class="container">
-    <div class="row">
-        <div class="col-8" style="margin-top: 10px;">
-            <!--Navbar buscar-->
-            <nav class="navbar navbar-expand " aria-label="Second navbar example">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="#"><h3>Products</h3></a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false"
-                            aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarsExample02">
-                        <input class="form-control buscador" type="search" placeholder="Search" aria-label="Search"
-                               id="searchInput">
+    <div class="container text-center" style="margin:30px">
+        <h3>Products <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/addProduct}" class="btn btn-outline-success">Add Product</a></h3>
+    </div>
+    <div>
+        <table class="table table-striped table-hover align-middle table-bordered">
+            <thead class="table-info text-center">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Stock</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')" scope="col">  </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${products}">
+                <th th:text="${product.idProduct}" scope="row">1</th>
+                <td th:text="${product.name}">Cookies</td>
+                <td th:text="${product.price}">$200</td>
+                <td th:text="${product.stock}">39</td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
+                    <div class="container">
+                        <a th:href="@{/updateProduct/{id}(id=${product.idProduct})}" class="btn btn-warning">Update</a>
+                        <a th:href="@{/deleteProduct/{id}(id=${product.idProduct})}" class="btn btn-danger">Delete</a>
                     </div>
-                </div>
-            </nav>
-            <!-- Fin Navbar buscar-->
-            <table class="table table-striped table-hover align-middle table-bordered" id="dataTable">
-                <thead class="table-info text-center">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Stock</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                </tr>
-                </thead>
-                <tbody id="tableBody">
-
-                </tbody>
-            </table>
-        </div>
-        <div class="col-4 ml-auto" style="margin-top: 55px">
-            <div class="ml-5">
-                <input type="hidden" id="idProduct"/>
-                <div class="form-group">
-                    <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" name="name" required="true"
-                           data-transform="uppercase">
-                </div>
-                <div class="form-group">
-                    <label for="price" class="form-label">Price</label>
-                    <input type="number" step="any" class="form-control" id="price" name="price" required="true">
-                </div>
-                <div class="form-group">
-                    <label for="stock" class="form-label">Stock</label>
-                    <input type="number" step="any" class="form-control" id="stock" name="stock">
-                </div>
-                <button onclick="addProduct()" class="btn btn-primary rounded-pill mt-3" style="width: 100%;">Add Product</button>
-                <button onclick="clearForm()" class="btn btn-info rounded-pill mt-3" style="width: 100%;">Clear</button>
-            </div>
-        </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
-<!--Script-->
-<script src="js/product/main.js"></script>
-<!--Script-->
 
-<!--Footer General-->
 <div th:replace="~{fragment/footer::footer-section}">Footer</div>
-<!--Footer General-->
 </body>
 </html>

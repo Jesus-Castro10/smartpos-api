@@ -1,21 +1,15 @@
 package com.educastro.sales.service;
 
-import com.educastro.sales.model.Customer;
-import com.educastro.sales.model.Employee;
 import com.educastro.sales.model.Sale;
 import com.educastro.sales.model.SaleDetails;
 import com.educastro.sales.repository.SaleRepository;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.educastro.sales.util.SaleFunctions.*;
@@ -37,18 +31,8 @@ public class SaleService implements ISaleService{
     }
 
     @Override
-    public Sale saveSale(Employee employee, Customer customer, List<SaleDetails> saleDetails) {
-        Date date = new Date();
-        LocalTime hour = LocalTime.now();
-        double subtotal = 0;
-        JSONArray products = new JSONArray();
-        for (SaleDetails sd : saleDetails){
-            products.put(new JSONObject(sd));
-            subtotal += sd.getSubTotal();
-        }
-        double total = subtotal + (subtotal * 0.19);
-        Sale sale = new Sale(customer,employee,date,hour,products.toString(),total);
-        return saleRepository.save(sale);
+    public void saveSale(Sale sale) {
+        saleRepository.save(sale);
     }
 
     @Override
