@@ -1,13 +1,15 @@
 package com.educastro.sales.service;
 
-import com.educastro.sales.model.dto.SaleDTO;
-import com.educastro.sales.model.entities.Sale;
+import com.educastro.sales.model.Customer;
+import com.educastro.sales.model.Employee;
+import com.educastro.sales.model.Sale;
+import com.educastro.sales.model.SaleDetails;
 
 import java.util.List;
 
 public interface ISaleService {
     public List<Sale> toListSale();
     public Sale findSaleById(Integer idSale);
-    public Sale saveSale(SaleDTO saleDTO);
-    public void deleteSale(Integer idSale);
+    public Sale saveSale(Employee employee, Customer customer, List<SaleDetails> saleDetails);
+    public void deleteSale(Sale sale);
 }

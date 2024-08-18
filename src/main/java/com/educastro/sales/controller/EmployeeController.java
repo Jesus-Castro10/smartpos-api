@@ -1,50 +1,65 @@
 package com.educastro.sales.controller;
 
+import com.educastro.sales.model.Employee;
 import com.educastro.sales.model.dto.EmployeeDTO;
-import com.educastro.sales.model.entities.Employee;
 import com.educastro.sales.service.EmployeeService;
-import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 
 import java.util.List;
 
-@AllArgsConstructor
-@RequestMapping("/api/employees")
-@RestController
-@CrossOrigin
+@Controller
+@RequestMapping("/employees")
 public class EmployeeController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
+    // private static final Logger logger =
+    // LoggerFactory.getLogger(CustomerController.class);
 
-    private final EmployeeService employeeService;
+    @Autowired
+    private EmployeeService employeeService;
 
     @GetMapping
-    public List<Employee> findAll() {
-        return employeeService.toListEmployee();
+    public String showCustomers(ModelMap map) {
+        List<Employee> employees = employeeService.findAll();
+        map.put("employees", employees);
+        return "employees";
     }
 
-    @GetMapping("{id}")
-    public Employee findEmployee(@PathVariable(value = "id") String username){
-        return employeeService.findEmployeeById(username);
+    @GetMapping("/add")
+    public String showAddEmployee() {
+        return "addEmployee";
     }
 
-    @PostMapping
-    public Employee createEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        return employeeService.saveEmployee(employeeDTO);
+    @PostMapping("/add")
+    public String addEmployee(@ModelAttribute(name = "employeeForm") EmployeeDTO employee) {
+        employeeService.save(employee);
+        return "redirect:/employees";
     }
 
-    @PutMapping
-    public Employee updateEmployee(@PathVariable(value = "id") String username,
-                                   @RequestBody EmployeeDTO employeeDTO){
-        return employeeService.updateEmployee(username,employeeDTO);
+    @GetMapping("/update/{id}")
+    public String showUpdate(@PathVariable(value = "id") String idCard, ModelMap map) {
+        Employee employee = employeeService.findById(idCard);
+        map.put("employee", employee);
+        return "/updateEmployee";
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable(value = "id") String username){
-        employeeService.deleteEmployee(username);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/update")
+    public String updateEmployee(@ModelAttribute(name = "employee") EmployeeDTO employee) {
+        employeeService.update(employee);
+        return "redirect:/employees";
     }
+
+    @GetMapping("/delete/{id}")
+    public String deleteEmployee(@PathVariable(value = "id") String idCard) {
+        employeeService.delete(idCard);
+        return "redirect:/employees";
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.educastro.sales.model.dto;
 
-import com.educastro.sales.validation.NotNumeric;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -13,16 +12,21 @@ import lombok.Setter;
 @Setter
 public class EmployeeDTO {
 
-    @Size(min = 3, max = 20)
-    @NotBlank
-    @NotNumeric
-    private String name;
+    private String idCard;
 
-    @Size(min = 3, max = 20)
     @NotBlank
-    @NotNumeric
-    private String lastName;
+    private String firstname;
 
+    @NotBlank
+    private String secondname;
+
+    @NotBlank
+    private String firstLastname;
+
+    @NotBlank
+    private String secondLastname;
+
+    @NotBlank
     private String address;
 
     @Size(min = 7, max = 10)
@@ -33,6 +37,9 @@ public class EmployeeDTO {
     @Email
     private String email;
 
-    @JsonProperty("user")
+    @NotBlank
+    private String post;
+
+    @JsonIgnore
     private UserDTO userDTO;
 }

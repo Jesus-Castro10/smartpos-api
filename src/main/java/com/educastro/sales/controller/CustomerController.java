@@ -1,90 +1,77 @@
 package com.educastro.sales.controller;
 
+import com.educastro.sales.model.Customer;
 import com.educastro.sales.model.dto.CustomerDTO;
-import com.educastro.sales.model.entities.Customer;
 import com.educastro.sales.service.CustomerService;
-import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import com.educastro.sales.view.CustomerDataExcelExport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-@AllArgsConstructor
-@RequestMapping("/api/customers")
-@RestController
-@CrossOrigin
+@Controller
+@RequestMapping("/customers")
 public class CustomerController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
-
-    private final CustomerService customerService;
+    @Autowired
+    private CustomerService customerService;
 
     @GetMapping
-    public List<Customer> findAll(){
-        return customerService.toListCustomer();
+    public String showCustomer(ModelMap map) {
+        List<Customer> customers = customerService.toListCustomer();
+        map.put("customers", customers);
+        return "customers";
     }
 
-    @GetMapping("{id}")
-    public Customer getCustomer(@PathVariable(value = "id") Integer idCustomer){
-        return customerService.findCustomerById(idCustomer);
+    @GetMapping("/add")
+    public String showAddCustomer() {
+        return "addCustomer";
     }
 
-    @PostMapping
-    public ResponseEntity<?> createCustomer(@Valid @RequestBody CustomerDTO customer, BindingResult result){
-        if (result.hasFieldErrors()){
-            return validation(result);
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.saveCustomer(customer));
+    @PostMapping("/add")
+    public String addCustomer(@ModelAttribute("customerForm") CustomerDTO customer) {
+        customerService.saveCustomer(customer);
+        return "redirect:/customers";
     }
 
-    @PutMapping
-    public Customer updateCustomer(@PathVariable(value = "id") Integer idCustomer,
-                                   @Valid @RequestBody CustomerDTO customerDTO){
-        return customerService.updateCustomer(idCustomer,customerDTO);
+    @GetMapping("/update/{id}")
+    public String showUpdate(@PathVariable(value = "id") Integer idCustomer, ModelMap map) {
+        System.out.println("Update customer");
+        Customer customer = customerService.findCustomerById(idCustomer);
+        map.put("customer", customer);
+        return "updateCustomer";
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable(value = "id") Integer idCustomer){
+    @PostMapping("/update")
+    public String updateCustomer(@ModelAttribute(name = "customer") Customer customer) {
+        customerService.updateCustomer(customer);
+        return "redirect:/customers";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteCustomer(@PathVariable(value = "id") Integer idCustomer) {
         customerService.deleteCustomer(idCustomer);
-        return ResponseEntity.noContent().build();
+        return "redirect:/customers";
     }
 
-    private ResponseEntity<?> validation(BindingResult result) {
-        Map<String, String> errors = new HashMap<>();
-
-        result.getFieldErrors().forEach(err -> {
-            errors.put(err.getField(), "The field " + err.getField() + " " + err.getDefaultMessage());
-        });
-        return ResponseEntity.badRequest().body(errors);
+    /***
+     * Export data to excel file
+     */
+    @GetMapping("/customerExcelExport")
+    public ModelAndView exportToExcel() {
+        ModelAndView mav = new ModelAndView();
+        mav.setView(new CustomerDataExcelExport());
+        // read data from DB
+        List<Customer> list = customerService.toListCustomer();
+        // send to excelImpl class
+        mav.addObject("list", list);
+        return mav;
     }
-
-//    @GetMapping("/customerExcelExport")
-//    public ModelAndView exportToExcel() {
-//        ModelAndView mav = new ModelAndView();
-//        mav.setView(new CustomerDataExcelExport());
-//        //read data from DB
-//        List<Customer> list= customerService.toListCustomer();
-//        //send to excelImpl class
-//        mav.addObject("list", list);
-//        return mav;
-//    }
-
-//    @PatchMapping("/mark_as_finished/{id}")
-//    public ResponseEntity<Void> markAsFiniched(@PathVariable("id") Long id) {
-//        this.taskService.updateTaskAsFinished(id);
-//        return ResponseEntity.noContent().build();
-//    }
-
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
-//        this.taskService.deleteById(id);
-//        return ResponseEntity.noContent().build();
-//    }
 }

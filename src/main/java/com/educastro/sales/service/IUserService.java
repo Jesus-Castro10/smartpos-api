@@ -1,7 +1,6 @@
 package com.educastro.sales.service;
 
-import com.educastro.sales.model.dto.UserDTO;
-import com.educastro.sales.model.entities.User;
+import com.educastro.sales.model.User;
 
 import java.util.List;
 import java.util.Optional;

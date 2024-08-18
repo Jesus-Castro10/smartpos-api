@@ -1,8 +1,5 @@
 package com.educastro.sales.model.dto;
 
-import com.educastro.sales.model.entities.Customer;
-import com.educastro.sales.validation.IsExist;
-import com.educastro.sales.validation.NotNumeric;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -19,12 +16,12 @@ public class CustomerDTO {
 
     @Size(min = 3, max = 20)
     @NotBlank
-    @NotNumeric
+//    @NotNumeric
     private String name;
 
     @Size(min = 3, max = 20)
     @NotBlank
-    @NotNumeric
+//    @NotNumeric
     private String lastName;
 
     private String address;
@@ -39,4 +36,8 @@ public class CustomerDTO {
 
     @JsonProperty("user")
     private UserDTO userDTO;
+
+    public UserDTO getUserDTO(){
+        return new UserDTO(name,lastName,"12345");
+    }
 }

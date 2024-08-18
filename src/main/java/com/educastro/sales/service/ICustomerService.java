@@ -1,11 +1,9 @@
 package com.educastro.sales.service;
 
+import com.educastro.sales.model.Customer;
 import com.educastro.sales.model.dto.CustomerDTO;
-import com.educastro.sales.model.entities.Customer;
-import com.educastro.sales.model.entities.User;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  *
@@ -13,10 +11,12 @@ import java.util.Optional;
  */
 public interface ICustomerService {
     public List<Customer> toListCustomer();
+
     public Customer findCustomerById(Integer idCustomer);
+
     public Customer saveCustomer(CustomerDTO customer);
-    public Customer updateCustomer(Integer idCustomer,CustomerDTO customerDTO);
+
+    public Customer updateCustomer(Customer customer);
+
     public void deleteCustomer(Integer idCustomer);
-    Optional<Customer> findCustomerByUser(User user);
-    public boolean existsByEmail(String email);
 }

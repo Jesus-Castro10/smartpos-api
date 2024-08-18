@@ -1,9 +1,8 @@
 package com.educastro.sales.service;
 
+import com.educastro.sales.model.Role;
+import com.educastro.sales.model.User;
 import com.educastro.sales.model.dto.UserDTO;
-import com.educastro.sales.model.entities.Employee;
-import com.educastro.sales.model.entities.Role;
-import com.educastro.sales.model.entities.User;
 import com.educastro.sales.repository.RoleRepository;
 import com.educastro.sales.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

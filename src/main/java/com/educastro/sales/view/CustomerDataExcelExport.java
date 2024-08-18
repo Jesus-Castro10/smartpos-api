@@ -1,6 +1,6 @@
 package com.educastro.sales.view;
 
-import com.educastro.sales.model.entities.Customer;
+import com.educastro.sales.model.Customer;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Row;

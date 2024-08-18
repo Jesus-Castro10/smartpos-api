@@ -1,14 +1,15 @@
 package com.educastro.sales.service;
 
-import com.educastro.sales.model.dto.SaleDTO;
-import com.educastro.sales.exception.ResourceNotFoundException;
-import com.educastro.sales.model.entities.Sale;
-import com.educastro.sales.model.entities.SaleDetails;
+import com.educastro.sales.model.Customer;
+import com.educastro.sales.model.Employee;
+import com.educastro.sales.model.Sale;
+import com.educastro.sales.model.SaleDetails;
 import com.educastro.sales.repository.SaleRepository;
-import lombok.AllArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.modelmapper.ModelMapper;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
@@ -19,12 +20,11 @@ import java.util.List;
 
 import static com.educastro.sales.util.SaleFunctions.*;
 
-@AllArgsConstructor
 @Service
 public class SaleService implements ISaleService{
 
-    private final SaleRepository saleRepository;
-    private final ModelMapper mapper;
+    @Autowired
+    private SaleRepository saleRepository;
 
     @Override
     public List<Sale> toListSale() {
@@ -33,20 +33,26 @@ public class SaleService implements ISaleService{
 
     @Override
     public Sale findSaleById(Integer idSale) {
-        return saleRepository.findById(idSale).orElseThrow(ResourceNotFoundException::new);
+        return saleRepository.findById(idSale).orElse(null);
     }
 
     @Override
-    public Sale saveSale(SaleDTO saleDTO) {
-        Sale sale = mapper.map(saleDTO,Sale.class);
-        sale.setDate(new Date());
-        sale.setHour(LocalTime.now());
+    public Sale saveSale(Employee employee, Customer customer, List<SaleDetails> saleDetails) {
+        Date date = new Date();
+        LocalTime hour = LocalTime.now();
+        double subtotal = 0;
+        JSONArray products = new JSONArray();
+        for (SaleDetails sd : saleDetails){
+            products.put(new JSONObject(sd));
+            subtotal += sd.getSubTotal();
+        }
+        double total = subtotal + (subtotal * 0.19);
+        Sale sale = new Sale(customer,employee,date,hour,products.toString(),total);
         return saleRepository.save(sale);
     }
 
     @Override
-    public void deleteSale(Integer idSale) {
-        Sale sale = findSaleById(idSale);
+    public void deleteSale(Sale sale) {
         saleRepository.delete(sale);
     }
 

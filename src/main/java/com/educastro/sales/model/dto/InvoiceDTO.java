@@ -1,8 +1,8 @@
 package com.educastro.sales.model.dto;
 
-import com.educastro.sales.model.entities.Customer;
-import com.educastro.sales.model.entities.Employee;
-import com.educastro.sales.model.entities.SaleDetails;
+import com.educastro.sales.model.Customer;
+import com.educastro.sales.model.Employee;
+import com.educastro.sales.model.SaleDetails;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;

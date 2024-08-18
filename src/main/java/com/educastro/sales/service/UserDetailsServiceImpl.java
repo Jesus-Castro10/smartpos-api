@@ -1,7 +1,8 @@
 package com.educastro.sales.service;
 
 import com.educastro.sales.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,19 +17,21 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    @Autowired
     private final UserRepository repository;
 
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<com.educastro.sales.model.entities.User> userOptional = repository.findByUsername(username);
+        System.out.println("Load user");
+        Optional<com.educastro.sales.model.User> userOptional = repository.findByUsername(username);
         if(userOptional.isEmpty()) {
             throw new UsernameNotFoundException(String.format("Username %s doesn't exist",username));
         }
-        com.educastro.sales.model.entities.User user = userOptional.orElseThrow();
+        com.educastro.sales.model.User user = userOptional.orElseThrow();
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
 

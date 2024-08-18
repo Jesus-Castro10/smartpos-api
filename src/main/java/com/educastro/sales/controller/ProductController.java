@@ -1,51 +1,57 @@
 package com.educastro.sales.controller;
 
+import com.educastro.sales.model.Product;
 import com.educastro.sales.model.dto.ProductDTO;
-import com.educastro.sales.model.entities.Product;
 import com.educastro.sales.service.ProductService;
-import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@AllArgsConstructor
-@RequestMapping("/api/products")
-@RestController
-@CrossOrigin
+@Controller
+@RequestMapping("/products")
 public class ProductController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
-
-    private final ProductService productService;
+    @Autowired
+    private ProductService productService;
 
     @GetMapping
-    public  List<Product> findAll(){
-        return productService.toListProduct();
+    public String showProducts(ModelMap map) {
+        List<Product> products = productService.findAll();
+        map.put("products", products);
+        return "products";
     }
 
-    @GetMapping("{id}")
-    public Product getProduct(@PathVariable(value = "id") Integer idProduct){
-        return productService.findProductById(idProduct);
+    @GetMapping("/add")
+    public String showAddProduct() {
+        return "addProduct";
     }
 
-    @PostMapping
-    public Product addProduct(@Validated @RequestBody ProductDTO productDTO){
-        return productService.saveProduct(productDTO);
+    @PostMapping("/add")
+    public String addProduct(@ModelAttribute(name = "productForm") ProductDTO product) {
+        Product pg = productService.save(product);
+        System.out.println("produto guardado -> " + pg);
+        return "redirect:/products";
     }
 
-    @PutMapping("{id}")
-    public Product updateProduct(@PathVariable(value = "id") Integer idProduct,
-                                  @Validated @RequestBody ProductDTO productDTO){
-        return productService.updateProduct(idProduct,productDTO);
+    @GetMapping("/update/{id}")
+    public String showUpdate(@PathVariable Integer id, ModelMap map) {
+        Product product = productService.findById(id);
+        map.put("product", product);
+        return "updateProduct";
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable(value = "id") Integer idProduct){
-        productService.deleteProduct(idProduct);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/update")
+    public String updateProduct(@ModelAttribute(name = "product") Product product) {
+        productService.update(product);
+        return "redirect:/products";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable Integer id) {
+        productService.delete(id);
+        return "redirect:/products";
     }
 }
