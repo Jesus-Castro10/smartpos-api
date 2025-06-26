@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 /**
  *
  * @author Jesus Castro
@@ -16,17 +14,16 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "employees")
 public class Employee {
 
     @Id
-    @Column(name = "idCustomer")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idCustomer;
+    private Integer id;
     @NotBlank
     private String name;
     @NotBlank
-    @Column(name = "last_name")
-    private String lastName;
+    private String lastname;
     @NotBlank
     private String address;
     @NotBlank
@@ -34,10 +31,10 @@ public class Employee {
     @NotBlank
     private String email;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id_user")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     public String getFullName(){
-        return this.name + " " + this.lastName;
+        return this.name + " " + this.lastname;
     }
 }

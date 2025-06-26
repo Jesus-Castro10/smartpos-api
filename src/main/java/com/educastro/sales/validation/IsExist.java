@@ -2,7 +2,6 @@ package com.educastro.sales.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import org.apache.commons.codec.language.bm.Lang;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

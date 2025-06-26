@@ -20,11 +20,11 @@ public class Invoice {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "idCustomer")
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "idCustomer")
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
     private double total;

@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.educastro.sales.util.SaleFunctions.*;
-
 @AllArgsConstructor
 @Service
 public class SaleService implements ISaleService{
@@ -52,9 +50,7 @@ public class SaleService implements ISaleService{
 
     public byte[] generateInvoice(Sale sale) throws JRException {
         List<SaleDetails> list = new ArrayList<>();
-        if (sale != null){
-            list = recoveryProducts(sale);
-        }
+        
         // Load the report template
         InputStream reportTemplate = getClass().getResourceAsStream("/reports/Invoice.jrxml");
         // Compile the report template

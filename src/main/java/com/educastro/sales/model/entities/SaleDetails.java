@@ -11,7 +11,7 @@ public class SaleDetails {
 
     private Product product;
     private int amount;
-    private float subTotal;
+    // private float subTotal;
 
     public SaleDetails(){}
 
@@ -19,10 +19,10 @@ public class SaleDetails {
         this.product = product;
     }
 
-    public SaleDetails(Product product, int amount) {
-        this.product = product;
-        this.amount = amount;
-    }
+    // public SaleDetails(Product product, int amount) {
+    //     this.product = product;
+    //     this.amount = amount;
+    // }
 
     public float getSubTotal() {
         return product.getPrice() * amount;

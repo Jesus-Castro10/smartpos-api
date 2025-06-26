@@ -1,6 +1,7 @@
 package com.educastro.sales.config;
 
-import com.educastro.sales.model.mapper.CustomerMapper;
+import com.educastro.sales.model.mapper.ProductMapper;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +15,7 @@ public class ModelMapperConfig {
     }
 
     @Bean
-    CustomerMapper customerMapper(){
-        return new CustomerMapper();
+    public ProductMapper productMapper() {
+        return new ProductMapper();
     }
 }

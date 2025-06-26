@@ -85,4 +85,14 @@ public class ExceptionHandling {
     //MethodArgumentTypeMismatchException
     //HttpRequestMethodNotSupportedException
     //HttpMessageNotReadableException
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(Exception.class)
+    public Map<String, Object> handleException(Exception ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("status", HttpStatus.FORBIDDEN.value());
+        error.put("error", "Forbidden");
+        error.put("message", ex.getMessage());
+        return error;
+    }
 }

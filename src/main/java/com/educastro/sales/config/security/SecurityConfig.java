@@ -1,6 +1,5 @@
-package com.educastro.sales.config;
+package com.educastro.sales.config.security;
 
-import com.educastro.sales.config.filter.JwtAuthenticationFilter;
 import com.educastro.sales.config.filter.JwtValidationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -9,15 +8,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -36,34 +30,13 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeHttpRequests((authz) -> authz
-//                .requestMatchers(request -> request.getRequestURI().startsWith("/addCustomer/"))
-//                .hasRole("ADMIN")
-//                .requestMatchers("/addEmployee").hasRole("ADMIN")
-//                .requestMatchers(request -> request.getRequestURI().startsWith("/delete/"))
-//                .hasRole("ADMIN")
-//                .anyRequest().authenticated()
-//                )
-//                .exceptionHandling((exceptionHandling) -> exceptionHandling
-//                .accessDeniedHandler(new CustomAccessDeniedHandler()))
-//                .formLogin((form) -> form
-//                .loginPage("/login").permitAll()
-//                )
-//                .logout((logout) -> logout.permitAll());
-//
-//        return http.build();
-//    }
-
-    @Bean
+    @Bean 
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests((authz) -> authz
-                        .requestMatchers(HttpMethod.GET,"/api/customers").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/testing").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .addFilter(new JwtValidationFilter(authenticationManager()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

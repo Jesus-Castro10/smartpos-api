@@ -16,12 +16,12 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "sales")
 public class Sale {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_sale")
-    private Integer idSale;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")

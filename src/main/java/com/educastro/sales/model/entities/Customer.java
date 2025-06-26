@@ -16,17 +16,19 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Table(name = "customers")
 public class Customer {
     
     @Id
-    @Column(name = "idCustomer")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idCustomer;
+    private Integer id;
+
+    @Column(unique = true, nullable = false)
+    private String idCard;
 
     private String name;
 
-    @Column(name = "last_name")
-    private String lastName;
+    private String lastname;
 
     private String address;
 
@@ -36,16 +38,16 @@ public class Customer {
 
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id_user")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    public Customer(Integer idCustomer, String name, String lastName) {
-        this.idCustomer = idCustomer;
+    public Customer(Integer id, String name, String lastName) {
+        this.id = id;
         this.name = name;
-        this.lastName = lastName;
+        this.lastname = lastName;
     }
 
     public String getFullName(){
-        return this.name + " " + this.lastName;
+        return this.name + " " + this.lastname;
     }
 }

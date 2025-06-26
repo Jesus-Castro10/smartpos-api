@@ -7,7 +7,6 @@ import com.educastro.sales.model.entities.Invoice;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public interface IInvoiceService {
     List<Invoice> findAll();

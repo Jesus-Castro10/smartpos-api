@@ -4,13 +4,13 @@ import com.educastro.sales.model.dto.ProductDTO;
 import com.educastro.sales.model.entities.Product;
 import com.educastro.sales.service.ProductService;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @AllArgsConstructor
 @RequestMapping("/api/products")
@@ -18,34 +18,33 @@ import java.util.List;
 @CrossOrigin
 public class ProductController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
     private final ProductService productService;
 
     @GetMapping
-    public  List<Product> findAll(){
-        return productService.toListProduct();
+    public  ResponseEntity<Page<Product>> findAll(@PageableDefault(size = 10) Pageable pageable){
+        return ResponseEntity.ok(productService.findAll(pageable));
     }
 
     @GetMapping("{id}")
-    public Product getProduct(@PathVariable(value = "id") Integer idProduct){
-        return productService.findProductById(idProduct);
+    public Product getProduct(@PathVariable Integer id){
+        return productService.findById(id);
     }
 
     @PostMapping
     public Product addProduct(@Validated @RequestBody ProductDTO productDTO){
-        return productService.saveProduct(productDTO);
+        return productService.save(productDTO);
     }
 
     @PutMapping("{id}")
-    public Product updateProduct(@PathVariable(value = "id") Integer idProduct,
+    public Product updateProduct(@PathVariable Integer id,
                                   @Validated @RequestBody ProductDTO productDTO){
-        return productService.updateProduct(idProduct,productDTO);
+        return productService.update(id,productDTO);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable(value = "id") Integer idProduct){
-        productService.deleteProduct(idProduct);
+    public ResponseEntity<Void> deleteProduct(@PathVariable Integer id){
+        productService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,8 +1,9 @@
 package com.educastro.sales.model.entities;
 
+import com.educastro.sales.model.enums.RoleName;
+
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -13,13 +14,12 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_role")
     private Integer id;
 
-    @Column(unique = true)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleName rolename;
 
-    public Role(String name) {
-        this.name = name;
+    public Role(RoleName name) {
+        this.rolename = name;
     }
 }

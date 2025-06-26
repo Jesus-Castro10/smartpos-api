@@ -30,7 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         com.educastro.sales.model.entities.User user = userOptional.orElseThrow();
         List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+                .map(role -> new SimpleGrantedAuthority(role.getRolename().getName())).collect(Collectors.toList());
 
         return new User(user.getUsername(),
                 user.getPassword(),

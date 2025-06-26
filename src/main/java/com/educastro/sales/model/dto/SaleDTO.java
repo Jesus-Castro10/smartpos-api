@@ -1,6 +1,5 @@
 package com.educastro.sales.model.dto;
 
-import com.educastro.sales.model.entities.Customer;
 import com.educastro.sales.model.entities.Employee;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.DecimalMin;

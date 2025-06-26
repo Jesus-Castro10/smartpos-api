@@ -4,8 +4,6 @@ import com.educastro.sales.model.dto.EmployeeDTO;
 import com.educastro.sales.model.entities.Employee;
 import com.educastro.sales.service.EmployeeService;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +15,6 @@ import java.util.List;
 @CrossOrigin
 public class EmployeeController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
-
     private final EmployeeService employeeService;
 
     @GetMapping
@@ -27,7 +23,7 @@ public class EmployeeController {
     }
 
     @GetMapping("{id}")
-    public Employee findEmployee(@PathVariable(value = "id") String username){
+    public Employee findEmployee(@PathVariable(value = "id") Integer username){
         return employeeService.findEmployeeById(username);
     }
 
@@ -37,13 +33,13 @@ public class EmployeeController {
     }
 
     @PutMapping
-    public Employee updateEmployee(@PathVariable(value = "id") String username,
+    public Employee updateEmployee(@PathVariable(value = "id") Integer username,
                                    @RequestBody EmployeeDTO employeeDTO){
         return employeeService.updateEmployee(username,employeeDTO);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable(value = "id") String username){
+    public ResponseEntity<Void> deleteEmployee(@PathVariable(value = "id") Integer username){
         employeeService.deleteEmployee(username);
         return ResponseEntity.noContent().build();
     }

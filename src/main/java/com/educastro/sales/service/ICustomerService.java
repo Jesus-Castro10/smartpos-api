@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface ICustomerService {
     public List<Customer> toListCustomer();
     public Customer findCustomerById(Integer idCustomer);
-    public Customer saveCustomer(CustomerDTO customer);
+    public Customer save(CustomerDTO customer);
     public Customer updateCustomer(Integer idCustomer,CustomerDTO customerDTO);
     public void deleteCustomer(Integer idCustomer);
     Optional<Customer> findCustomerByUser(User user);

@@ -1,5 +1,7 @@
 package com.educastro.sales.model.entities;
 
+import com.educastro.sales.model.enums.ProductStatus;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,15 +15,20 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "products")
 public class Product {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_product")
-    private Integer idProduct;
+    private Integer id;
     private String name;
     private float price;
+    private String description;
     private int stock;
+    private String image;
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

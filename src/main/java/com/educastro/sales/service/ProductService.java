@@ -3,15 +3,15 @@ package com.educastro.sales.service;
 import com.educastro.sales.model.dto.ProductDTO;
 import com.educastro.sales.exception.ResourceNotFoundException;
 import com.educastro.sales.model.entities.Product;
+import com.educastro.sales.model.mapper.ProductMapper;
 import com.educastro.sales.repository.ProductRepository;
 import lombok.AllArgsConstructor;
-import org.hibernate.mapping.UniqueKey;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  *
@@ -19,51 +19,56 @@ import java.util.List;
  */
 @AllArgsConstructor
 @Service
-public class ProductService implements IProductService{
+public class ProductService implements IProductService {
 
     private final ProductRepository productRepository;
     private final ModelMapper mapper;
+    private final ProductMapper productMapper;
 
     @Override
     @Transactional(readOnly = true)
-    public List<Product> toListProduct() {
-        return productRepository.findAll();
+    public Page<Product> findAll(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+        if (products.isEmpty()) {
+            throw new ResourceNotFoundException();
+        }
+        return products;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Product findProductById(Integer idProduct) {
-        return productRepository.findById(idProduct).orElseThrow(ResourceNotFoundException::new);
+    public Product findById(Integer id) {
+        return productRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Product findByName(String name) {
+        return productRepository.findByNameLike(name).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
     @Transactional
-    public Product findProductByName(String name) {
-        return productRepository.findByNameLike(name);
-    }
-
-    @Override
-    @Transactional
-    public Product saveProduct(ProductDTO productDTO) {
-        if (existsByName(productDTO.getName())){
+    public Product save(ProductDTO productDTO) {
+        if (existsByName(productDTO.getName())) {
             throw new DuplicateKeyException("Name can't be duplicate");
         }
-        Product product = mapper.map(productDTO, Product.class);
+        Product product = productMapper.map(productDTO);
         return productRepository.save(product);
     }
 
     @Override
     @Transactional
-    public Product updateProduct(Integer idProduct, ProductDTO productDTO) {
-        Product product = findProductById(idProduct);
-        mapper.map(productDTO,product);
+    public Product update(Integer idProduct, ProductDTO productDTO) {
+        Product product = findById(idProduct);
+        mapper.map(productDTO, product);
         return productRepository.save(product);
     }
 
     @Override
     @Transactional
-    public void deleteProduct(Integer idProduct) {
-        Product product = findProductById(idProduct);
+    public void delete(Integer idProduct) {
+        Product product = findById(idProduct);
         productRepository.delete(product);
     }
 
@@ -72,4 +77,5 @@ public class ProductService implements IProductService{
     public boolean existsByName(String name) {
         return productRepository.existsByName(name);
     }
+
 }

@@ -5,9 +5,12 @@ import com.educastro.sales.model.entities.Employee;
 import com.educastro.sales.model.entities.SaleDetails;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Data;
+
 import java.util.Date;
 import java.util.List;
 
+@Data
 public class InvoiceDTO {
 
     private Employee employee;

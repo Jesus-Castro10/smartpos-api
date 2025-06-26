@@ -5,24 +5,17 @@ import com.educastro.sales.model.entities.Customer;
 import com.educastro.sales.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @AllArgsConstructor
 @RequestMapping("/api/customers")
 @RestController
 @CrossOrigin
 public class CustomerController {
-
-    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
     private final CustomerService customerService;
 
@@ -32,37 +25,25 @@ public class CustomerController {
     }
 
     @GetMapping("{id}")
-    public Customer getCustomer(@PathVariable(value = "id") Integer idCustomer){
-        return customerService.findCustomerById(idCustomer);
+    public Customer getCustomer(@PathVariable Integer id){
+        return customerService.findCustomerById(id);
     }
 
     @PostMapping
-    public ResponseEntity<?> createCustomer(@Valid @RequestBody CustomerDTO customer, BindingResult result){
-        if (result.hasFieldErrors()){
-            return validation(result);
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.saveCustomer(customer));
+    public ResponseEntity<?> createCustomer(@Valid @RequestBody CustomerDTO customer){
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.save(customer));
     }
 
     @PutMapping
-    public Customer updateCustomer(@PathVariable(value = "id") Integer idCustomer,
+    public Customer updateCustomer(@PathVariable Integer id,
                                    @Valid @RequestBody CustomerDTO customerDTO){
-        return customerService.updateCustomer(idCustomer,customerDTO);
+        return customerService.updateCustomer(id,customerDTO);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable(value = "id") Integer idCustomer){
-        customerService.deleteCustomer(idCustomer);
+    public ResponseEntity<Void> deleteCustomer(@PathVariable Integer id){
+        customerService.deleteCustomer(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private ResponseEntity<?> validation(BindingResult result) {
-        Map<String, String> errors = new HashMap<>();
-
-        result.getFieldErrors().forEach(err -> {
-            errors.put(err.getField(), "The field " + err.getField() + " " + err.getDefaultMessage());
-        });
-        return ResponseEntity.badRequest().body(errors);
     }
 
 //    @GetMapping("/customerExcelExport")
@@ -79,12 +60,6 @@ public class CustomerController {
 //    @PatchMapping("/mark_as_finished/{id}")
 //    public ResponseEntity<Void> markAsFiniched(@PathVariable("id") Long id) {
 //        this.taskService.updateTaskAsFinished(id);
-//        return ResponseEntity.noContent().build();
-//    }
-
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
-//        this.taskService.deleteById(id);
 //        return ResponseEntity.noContent().build();
 //    }
 }

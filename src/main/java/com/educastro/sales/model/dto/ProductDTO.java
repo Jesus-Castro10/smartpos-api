@@ -1,8 +1,6 @@
 package com.educastro.sales.model.dto;
 
-import com.educastro.sales.model.entities.Category;
 import com.educastro.sales.validation.NotNumeric;
-import com.educastro.sales.validation.Numeric;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +23,10 @@ public class ProductDTO {
     @Min(1)
     private int stock;
 
+    private String description;
+
+    private String image;
+
     @NotNull
-    private Category category;
+    private int category;
 }

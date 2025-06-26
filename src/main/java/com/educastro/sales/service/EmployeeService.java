@@ -6,11 +6,9 @@ import com.educastro.sales.model.entities.Employee;
 import com.educastro.sales.repository.EmployeeRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  *
@@ -29,7 +27,7 @@ public class EmployeeService implements IEmployeeService{
     }
 
     @Override
-    public Employee findEmployeeById(String idEmployee) {
+    public Employee findEmployeeById(Integer idEmployee) {
         return employeeRepository.findById(idEmployee).orElseThrow(ResourceNotFoundException::new);
     }
 
@@ -40,17 +38,16 @@ public class EmployeeService implements IEmployeeService{
     }
 
     @Override
-    public Employee updateEmployee(String idEmployee, EmployeeDTO employeeDTO) {
+    public Employee updateEmployee(Integer idEmployee, EmployeeDTO employeeDTO) {
         Employee employee = findEmployeeById(idEmployee);
         mapper.map(employeeDTO,employee);
         return employeeRepository.save(employee);
     }
 
     @Override
-    public void deleteEmployee(String idEmployee) {
+    public void deleteEmployee(Integer idEmployee) {
         Employee employee = findEmployeeById(idEmployee);
         employeeRepository.delete(employee);
     }
-
     
 }

@@ -11,8 +11,8 @@ import java.util.List;
  */
 public interface IEmployeeService {
     public List<Employee> toListEmployee();
-    public Employee findEmployeeById(String idEmployee);
+    public Employee findEmployeeById(Integer idEmployee);
     public Employee saveEmployee(EmployeeDTO employeeDTO);
-    public Employee updateEmployee(String idEmployee,EmployeeDTO employeeDTO);
-    public void deleteEmployee(String idEmployee);
+    public Employee updateEmployee(Integer idEmployee,EmployeeDTO employeeDTO);
+    public void deleteEmployee(Integer idEmployee);
 }
