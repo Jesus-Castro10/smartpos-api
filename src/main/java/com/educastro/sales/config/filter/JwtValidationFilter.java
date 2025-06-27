@@ -1,6 +1,7 @@
 package com.educastro.sales.config.filter;
 
 import com.educastro.sales.config.SimpleGrantedAuthorityJsonCreator;
+import com.educastro.sales.config.TokenJwtConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -23,6 +24,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.crypto.SecretKey;
+
 import static com.educastro.sales.config.TokenJwtConfig.*;
 
 public class JwtValidationFilter extends BasicAuthenticationFilter {
@@ -40,6 +43,7 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
         }
         String token = header.replace(PREFIX_TOKEN,"");
         try {
+            SecretKey SECRET_KEY = TokenJwtConfig.getSecretKey();
             Claims claims = Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).getPayload();
             String username = claims.getSubject();
             Object authoritiesClaims = claims.get("authorities");

@@ -39,6 +39,7 @@ public class CustomerService implements ICustomerService{
 
     @Override
     public Customer save(CustomerDTO customerDTO) {
+        configureMapper(); // Asegura que el id no se asigne
         Customer customer = mapper.map(customerDTO, Customer.class);
         User user = userService.create(customerDTO.getName(), customerDTO.getLastname(), RoleName.ROLE_CUSTOMER.getName());
         customer.setUser(user);
@@ -70,4 +71,7 @@ public class CustomerService implements ICustomerService{
         return customerRepository.existsByEmail(email);
     }
 
+    public void configureMapper() {
+        mapper.typeMap(CustomerDTO.class, Customer.class).addMappings(m -> m.skip(Customer::setId));
+    }
 }

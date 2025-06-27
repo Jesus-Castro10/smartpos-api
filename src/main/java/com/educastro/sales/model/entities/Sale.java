@@ -33,8 +33,4 @@ public class Sale {
 
     private double total;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "invoice_id")
-    private Invoice invoice;
-
 }

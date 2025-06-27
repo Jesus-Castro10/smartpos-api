@@ -1,11 +1,11 @@
 package com.educastro.sales.config.security;
 
-import static com.educastro.sales.config.TokenJwtConfig.SECRET_KEY;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+
+import javax.crypto.SecretKey;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.educastro.sales.config.SimpleGrantedAuthorityJsonCreator;
+import com.educastro.sales.config.TokenJwtConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Claims;
@@ -32,7 +33,7 @@ public class JWTUtil {
         Claims claims = Jwts.claims()
                 .add("authorities", new ObjectMapper().writeValueAsString(roles))
                 .build();
-
+        SecretKey SECRET_KEY = TokenJwtConfig.getSecretKey();
         String token = Jwts.builder()
                 .subject(username)
                 .claims(claims)
@@ -53,6 +54,7 @@ public class JWTUtil {
     }
 
     public Claims getClaims(String token) {
+        SecretKey SECRET_KEY = TokenJwtConfig.getSecretKey();
         return Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).getPayload();
     }
 

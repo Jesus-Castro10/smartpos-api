@@ -1,7 +1,6 @@
 package com.educastro.sales.model.dto;
 
 import com.educastro.sales.model.entities.Employee;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -17,9 +16,5 @@ public class SaleDTO {
     @NotNull
     @DecimalMin("1")
     private double total;
-
-    @NotNull
-    @JsonProperty("invoice")
-    private InvoiceDTO invoiceDTO;
 
 }
