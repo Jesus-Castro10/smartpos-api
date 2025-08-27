@@ -13,6 +13,7 @@ public class TokenJwtConfig {
 
     public static SecretKey getSecretKey() {
         String secretKey = System.getenv("SECRET_KEY");
+        System.out.println("Secret Key: " + secretKey);
         return Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(secretKey));
     }
 }
