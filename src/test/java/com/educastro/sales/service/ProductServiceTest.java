@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -56,8 +57,7 @@ public class ProductServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> productService.findById(99));
     }
 
-    
-       @Test
+    @Test
     void testFindByNameSuccessfully() {
         Product product = new Product("Keyboard", 50);
         product.setId(1);
@@ -77,24 +77,22 @@ public class ProductServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> productService.findByName("Mouse"));
     }
 
-
     @Test
     void testSaveSuccessfully() {
-       ProductDTO dto = new ProductDTO();
-    Product product = new Product("keyboard", 30);
-    product.setId(1);
+        ProductDTO dto = new ProductDTO();
+        Product product = new Product("keyboard", 30);
+        product.setId(1);
 
-    when(productRepository.existsByName("keyboard")).thenReturn(false);
-    when(productMapper.map(dto)).thenReturn(product);
-    when(productRepository.save(product)).thenReturn(product);
+        when(productRepository.existsByName("keyboard")).thenReturn(false);
+        when(productMapper.map(dto)).thenReturn(product);
+        when(productRepository.save(product)).thenReturn(product);
 
-    Product result = productService.save(dto);
+        Product result = productService.save(dto);
 
-    assertNotNull(result);
-    assertEquals("keyboard", result.getName());
-    assertEquals(30, result.getPrice());
+        assertNotNull(result);
+        assertEquals("keyboard", result.getName());
+        assertEquals(30, result.getPrice());
     }
-
 
     @Test
     void testSaveDuplicateNameThrowsException() {
@@ -104,6 +102,25 @@ public class ProductServiceTest {
         when(productRepository.existsByName("keyboard")).thenReturn(true);
 
         assertThrows(DuplicateKeyException.class, () -> productService.save(dto));
-      
     }
+
+    @Test
+    void testDeleteSuccessfully() {
+        Product product = new Product("Mouse", 25);
+        product.setId(2);
+
+        when(productRepository.findById(2)).thenReturn(Optional.of(product));
+
+        productService.delete(2);
+
+        verify(productRepository).delete(product);
+    }
+
+    @Test
+    void testDeleteNotFoundThrowsException() {
+        when(productRepository.findById(99)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> productService.delete(99));
+    }
+
 }
