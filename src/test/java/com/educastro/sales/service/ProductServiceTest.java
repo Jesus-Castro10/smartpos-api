@@ -3,8 +3,7 @@ package com.educastro.sales.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
@@ -52,4 +51,24 @@ public class ProductServiceTest {
 
         assertThrows(ResourceNotFoundException.class, () -> productService.findById(99));
     }
+
+    @Test
+    void testDeleteSuccessfully() {
+        Product product = new Product("Mouse", 25);
+        product.setId(2);
+
+        when(productRepository.findById(2)).thenReturn(Optional.of(product));
+
+        productService.delete(2);
+
+        verify(productRepository).delete(product);
+    }
+
+    @Test
+    void testDeleteNotFoundThrowsException() {
+        when(productRepository.findById(99)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> productService.delete(99));
+    }
+
 }
