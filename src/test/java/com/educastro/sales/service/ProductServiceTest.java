@@ -3,7 +3,6 @@ package com.educastro.sales.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -57,6 +56,7 @@ public class ProductServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> productService.findById(99));
     }
 
+    
     @Test
     void testFindByNameSuccessfully() {
         Product product = new Product("Keyboard", 50);
@@ -76,6 +76,7 @@ public class ProductServiceTest {
 
         assertThrows(ResourceNotFoundException.class, () -> productService.findByName("Mouse"));
     }
+
 
     @Test
     void testSaveSuccessfully() {
@@ -103,6 +104,7 @@ public class ProductServiceTest {
 
         assertThrows(DuplicateKeyException.class, () -> productService.save(dto));
     }
+
 
     @Test
     void testDeleteSuccessfully() {
