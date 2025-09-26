@@ -12,11 +12,14 @@ jobs:
     name: Run Linter (Checkstyle)
     runs-on: ubuntu-latest
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ""
 
       - name: Setup Maven
-        uses: s4u/setup-maven-action@v1
+        uses: s4u/setup-maven-action@v1.18.0
         with:
           maven-version: '3.9.9'
 
@@ -50,6 +53,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ""
+
+      - name: Setup Maven
+        uses: s4u/setup-maven-action@v1.18.0
+        with:
+          maven-version: '3.9.9'
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -61,6 +71,9 @@ jobs:
 
       - name: Run tests with coverage
         run: mvn clean verify
+
+      - name: Install xmllint
+        run: sudo apt-get update && sudo apt-get install -y libxml2-utils
 
       - name: Enforce coverage ≥ 90%
         run: |
@@ -88,6 +101,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ""
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -115,6 +130,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ""
 
       - name: Build Docker image
         run: docker build -t springboot-app:latest .
