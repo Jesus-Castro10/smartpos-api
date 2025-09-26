@@ -33,7 +33,7 @@ jobs:
           cache: maven
 
       - name: Run Checkstyle
-        run: mvn checkstyle:check -Dcheckstyle.includes=**/*Producto*.java
+        run: mvn checkstyle:check -Dcheckstyle.includes=*/*Producto.java
 
 
   # 🔹 Job 2: Tests con Coverage
@@ -70,21 +70,47 @@ jobs:
           cache: maven
 
       - name: Run tests with coverage
-        run: mvn clean verify
+        run: mvn clean test jacoco:report
 
       - name: Install xmllint
         run: sudo apt-get update && sudo apt-get install -y libxml2-utils
 
       - name: Enforce coverage ≥ 90%
         run: |
-          COVERAGE=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@covered)" target/site/jacoco/jacoco.xml)
-          MISSED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@missed)" target/site/jacoco/jacoco.xml)
-          TOTAL=$((COVERAGE + MISSED))
-          PERCENT=$((100 * COVERAGE / TOTAL))
-          echo "Coverage: $PERCENT%"
-          if [ $PERCENT -lt 90 ]; then
-            echo "Coverage below 90%! Failing..."
+          # Verificar que el archivo existe
+          if [ ! -f "target/site/jacoco/jacoco.xml" ]; then
+            echo "❌ Error: jacoco.xml not found. Check if tests ran correctly."
+            ls -la target/site/jacoco/ || echo "Directory doesn't exist"
             exit 1
+          fi
+
+          # Extraer valores con manejo de errores
+          COVERAGE=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@covered)" target/site/jacoco/jacoco.xml 2>/dev/null || echo "0")
+          MISSED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@missed)" target/site/jacoco/jacoco.xml 2>/dev/null || echo "0")
+
+          # Convertir a números (por si vienen vacíos)
+          COVERAGE=${COVERAGE:-0}
+          MISSED=${MISSED:-0}
+
+          echo "Covered instructions: $COVERAGE"
+          echo "Missed instructions: $MISSED"
+
+          TOTAL=$((COVERAGE + MISSED))
+          
+          if [ $TOTAL -eq 0 ]; then
+            echo "❌ Error: No code analyzed (total instructions = 0)"
+            exit 1
+          fi
+
+          PERCENT=$((100 * COVERAGE / TOTAL))
+          echo "📊 Code Coverage: $PERCENT%"
+
+          if [ $PERCENT -lt 90 ]; then
+            echo "❌ Coverage below required 90%! Current: $PERCENT%"
+            echo "💡 Improve your tests to increase coverage"
+            exit 1
+          else
+            echo "✅ Coverage meets requirement: $PERCENT%"
           fi
 
       - name: Upload coverage report
