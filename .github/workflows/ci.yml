@@ -32,6 +32,11 @@ jobs:
           check-latest: false
           cache: maven
 
+      - name: Super-linter
+        uses: github/super-linter@v7.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN || '' }}
+
       - name: Run Checkstyle
         run: mvn checkstyle:check -Dcheckstyle.includes=*/*Producto.java
 
