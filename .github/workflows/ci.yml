@@ -16,7 +16,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN || '' }}
+          token: ${{ secrets.GITHUB_TOKEN}}
+
+      - name: Super-Linter (Múltiples lenguajes)
+        uses: github/super-linter@v5
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_JAVA: true
+          VALIDATE_JAVA_CHECKSTYLE: true
+          FILTER_REGEX_INCLUDE: .*Producto.*\.java$
 
       - name: Setup Maven
         uses: s4u/setup-maven-action@v1.18.0
@@ -54,7 +63,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN || '' }}
+          token: ${{ secrets.GITHUB_TOKEN}}
 
       - name: Setup Maven
         uses: s4u/setup-maven-action@v1.18.0
@@ -129,7 +138,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN || '' }}
+          token: ${{ secrets.GITHUB_TOKEN}}
 
       - name: Setup Maven
         uses: s4u/setup-maven-action@v1.18.0
@@ -164,7 +173,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN || '' }}
+          token: ${{ secrets.GITHUB_TOKEN}}
 
       - name: Build Docker image
         run: docker build -t springboot-app:latest .
